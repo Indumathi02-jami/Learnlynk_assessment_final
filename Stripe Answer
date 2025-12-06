@@ -1,0 +1,5 @@
+When a student chooses to pay their application fee, the first thing I do is create a payment_requests row in my database. This acts like a record saying, “A payment has started but not finished yet.” After that, I call Stripe to create a Checkout Session, passing details like the amount, currency, and also metadata so I can identify which application this payment belongs to.
+
+Stripe returns a session_id, and I save that in the same payment_requests row because I’ll need it later when Stripe notifies me about the payment success or failure. Once the user pays, Stripe sends a webhook to my backend. Inside that webhook handler, I verify the event and then update the payment_requests row to “paid,” along with saving Stripe’s payment_intent ID for reference.
+
+Finally, after confirming the payment, I update the related application in my database — for example, marking fee_paid = true or moving it to the next stage. This whole flow ensures that even if the user closes the browser, I still get the final status through webhooks and the application stays perfectly in sync with the payment.
