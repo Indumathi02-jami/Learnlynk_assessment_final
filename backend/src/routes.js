@@ -53,11 +53,6 @@ router.post("/", async (req, res) => {
   try {
     let { tenant_id, application_id, type, due_at } = req.body;
 
-    // Disallow viewers from creating tasks (enforce role-based permission)
-    if (req.user?.role === 'viewer') {
-      return res.status(403).json({ error: 'Insufficient permissions to create tasks' });
-    }
-
     // Validation
     if (!tenant_id || !application_id || !type) {
       return res.status(400).json({ error: "Missing required fields" });
@@ -84,9 +79,6 @@ router.post("/", async (req, res) => {
        RETURNING id, application_id, type, due_at, status, tenant_id`,
       [tenant_id, application_id, type, dueDate]
     );
-
-    // Log created task for debugging (helps verify server-side due_at)
-    console.log('Task created:', result.rows[0]);
 
     res.status(201).json({ success: true, task: result.rows[0] });
   } catch (err) {

@@ -7,7 +7,7 @@
 ## 🚀 Running Services
 
 ```
-Frontend:  http://localhost:3001  ✅ React app
+Frontend:  http://localhost:3000  ✅ React app
 Backend:   http://localhost:5000  ✅ Express API
 Database:  postgresql://localhost:5432  ✅ PostgreSQL
 ```
